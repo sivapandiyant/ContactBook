@@ -4,8 +4,9 @@ import (
 	"ContactBook/model/db"
 	"runtime/debug"
 
+	"fmt"
+
 	"github.com/astaxie/beego"
-	"tk.com/util/log"
 )
 
 type DeleteContact struct {
@@ -21,7 +22,7 @@ func (c *DeleteContact) Get() {
 
 		if l_exception := recover(); l_exception != nil {
 			stack := debug.Stack()
-			log.Println(beego.AppConfig.String("loglevel"), "Exception", string(stack))
+			fmt.Println("Exception", string(stack))
 			return
 		}
 
@@ -32,7 +33,7 @@ func (c *DeleteContact) Get() {
 
 	contactId := c.Ctx.Input.Param(":ID")
 
-	_, err = db.Db.Exec("UPDATE contact.details SET status = $1 WHERE id=$2 ", "INACTIVE", contactId)
+	err = db.UpdateStatus(contactId)
 
 	if err != nil {
 		responseMsg = "contact Delete Fail"

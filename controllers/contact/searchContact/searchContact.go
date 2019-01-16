@@ -4,11 +4,8 @@ import (
 	"runtime/debug"
 
 	"ContactBook/model/db"
-	sqlx "database/sql"
 
 	"fmt"
-
-	"tk.com/database/sql"
 
 	"github.com/astaxie/beego"
 )
@@ -53,21 +50,10 @@ func (c *SearchContact) Post() {
 
 	inputEmail := c.Input().Get("inputEmail")
 
-	var row *sqlx.Rows
-	row, err = db.Db.Query(`SELECT id, name,email,mobile,to_char(create_date,'YYYY-MM-DD HH24:MI:SS') FROM contact.details WHERE ($1='' OR LOWER(name) like '%' || LOWER($1) || '%') AND ($2='' OR LOWER(email) like '%' || LOWER($2) || '%') AND status=$3 `, inputName, inputEmail, "ACTIVE")
-	if err != nil {
-		responseMsg = "contact Search Fail"
-	}
+	data, err := db.SelectDB(inputName, inputEmail)
 
-	defer sql.Close(row)
-	_, data, err := sql.Scan(row)
 	if err != nil {
 		responseMsg = "contact Search Fail"
-		return
-	}
-	if len(data) <= 0 {
-		responseMsg = "contact Search Fail"
-		return
 	}
 
 	var result []Contact

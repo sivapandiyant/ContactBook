@@ -1,9 +1,8 @@
 package createContact
 
 import (
-	"tk.com/util/log"
-
 	"ContactBook/model/db"
+	"fmt"
 	"runtime/debug"
 	"strings"
 
@@ -29,8 +28,7 @@ func (c *CreateContact) Post() {
 
 		if l_exception := recover(); l_exception != nil {
 			stack := debug.Stack()
-			log.Println(beego.AppConfig.String("loglevel"), "Exception", string(stack))
-
+			fmt.Println("Exception", string(stack))
 		}
 
 		c.Data["Message"] = responseMsg

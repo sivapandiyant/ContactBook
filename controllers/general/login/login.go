@@ -5,12 +5,10 @@ import (
 	"runtime/debug"
 
 	"ContactBook/model/db"
-	sqlx "database/sql"
 	"encoding/base64"
 	"errors"
 
 	"github.com/astaxie/beego"
-	"tk.com/database/sql"
 )
 
 type Login struct {
@@ -27,13 +25,13 @@ type Logout struct {
 
 func (c *Home) Get() {
 
-	c.TplName = "contact/home/home.html"
+	c.TplName = "general/home/home.html"
 	return
 }
 
 func (c *Login) Get() {
 
-	c.TplName = "contact/login/login.html"
+	c.TplName = "general/login/login.html"
 	return
 }
 
@@ -52,7 +50,7 @@ func (c *Login) Post() {
 
 		if err != nil {
 			c.Data["Message"] = responseMsg
-			c.TplName = "contact/login/login.html"
+			c.TplName = "general/login/login.html"
 
 		} else {
 			c.Redirect("/Home", 302)
@@ -74,18 +72,12 @@ func (c *Login) Post() {
 		return
 	}
 
-	var row *sqlx.Rows
-	row, err = db.Db.Query(`SELECT username,password FROM contact.user WHERE username=$1`, username)
-	if err != nil {
-		responseMsg = "contact View Fail"
-	}
+	data, err := db.SelectUser(username)
 
-	defer sql.Close(row)
-	_, data, err := sql.Scan(row)
 	if err != nil {
 		responseMsg = "login Fail"
-		return
 	}
+
 	if len(data) <= 0 {
 		responseMsg = "login Fail"
 		return

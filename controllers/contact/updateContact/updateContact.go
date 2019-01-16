@@ -3,13 +3,9 @@ package updateContact
 import (
 	"runtime/debug"
 
-	"tk.com/util/log"
-
 	"ContactBook/model/db"
-	sqlx "database/sql"
+	"fmt"
 	"strings"
-
-	"tk.com/database/sql"
 
 	"github.com/astaxie/beego"
 )
@@ -36,7 +32,7 @@ func (c *UpdateContact) Get() {
 
 		if l_exception := recover(); l_exception != nil {
 			stack := debug.Stack()
-			log.Println(beego.AppConfig.String("loglevel"), "Exception", string(stack))
+			fmt.Println("Exception", string(stack))
 			return
 		}
 
@@ -45,24 +41,16 @@ func (c *UpdateContact) Get() {
 		return
 	}()
 
-	var row *sqlx.Rows
-	row, err := db.Db.Query(`SELECT id, name,email,mobile,to_char(create_date,'YYYY-MM-DD HH24:MI:SS') FROM contact.details WHERE id=$1`, contactId)
+	data, err := db.SelectContact(contactId)
+
 	if err != nil {
 		responseMsg = "contact View Fail"
 	}
 
-	defer sql.Close(row)
-	_, data, err := sql.Scan(row)
-	if err != nil {
-		responseMsg = "contact View Fail"
-		return
-	}
 	if len(data) <= 0 {
 		responseMsg = "contact View Fail"
 		return
 	}
-
-	log.Println(beego.AppConfig.String("loglevel"), "Debug", "Data - ", data)
 
 	c.Data["ID"] = data[0][0]
 	c.Data["Name"] = data[0][1]
@@ -79,7 +67,7 @@ func (c *UpdateContact) Post() {
 
 		if l_exception := recover(); l_exception != nil {
 			stack := debug.Stack()
-			log.Println(beego.AppConfig.String("loglevel"), "Exception", string(stack))
+			fmt.Println("Exception", string(stack))
 			return
 		}
 
@@ -108,7 +96,7 @@ func (c *UpdateContact) Post() {
 		return
 	}
 
-	err = db.InsertDB(inputMobile, inputEmail, inputName, contactId)
+	err := db.UpdateDB(inputMobile, inputEmail, inputName, contactId)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate") {

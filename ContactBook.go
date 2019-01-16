@@ -7,7 +7,6 @@ import (
 	"ContactBook/controllers/contact/updateContact"
 	"ContactBook/controllers/contact/viewContact"
 	"ContactBook/controllers/general/login"
-	"ContactBook/model/db"
 
 	"github.com/astaxie/beego"
 )
