@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+       <script src="../../../static/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body style="background:#F7F7F7; margin-left:20px;  margin-right:20px;">
+   
+    <section class="content-header">
+        <h1 class="page-header">Update Contact</h1>
+        <ol class="breadcrumb ">
+            <li><a href="/Home" >Home</a></li>
+            <li><a href="/UpdateContact/{{.ID}}">Update Contact</a></li>
+        </ol>
+    </section>
+    <section class="content">
+        <form action="/UpdateContact/{{.ID}}" name="UpdateContact" method="post" autocomplete="off" id="updateContact">
+                <div class="box-body">
+                    <fieldset>
+                        <legend>
+                            <h4>General Information</h4></legend>
+                            <div class="row">
+                              
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <label>Mobile</label>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control pull-right" id="inputMobile" name="inputMobile" onkeypress="validate(event)" value="{{.Mobile}}" maxlength="50" placeholder="Mobile Number"  />
+                            </div>
+                        </div>
+                        </div>                           
+                            
+                         </br>
+                            <div class="row">
+                               
+                                <div class="col-sm-3 col-md-3 col-xs-12">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-xs-12">
+                                    <div class="input-group ">
+                                        <input type="text" class="form-control pull-right" id="inputName" name="inputName" value="{{.Name}}" maxlength="20" placeholder="Contact Name" />
+                                    </div>
+                                </div>                            
+                            </div>
+                        </br>
+                       
+            
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <label>Email Address</label>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control pull-right" id="inputEmail" name="inputEmail" value="{{.Email}}" maxlength="50" placeholder="Email Address"  />
+                            </div>
+                        </div>
+
+                        </div>
+                        </br>
+                       
+               
+            </fieldset>
+            </div>
+
+             <div class="box box-primary pull-right">
+                <div class="box-header">
+                    <div class="row">
+                        <div class="col-lg-12 pull-right">
+                            <div style="float:right!important; margin-top: 2px!important;margin-bottom: -30px!important">
+                                <button type="button" name="addbutton" id="btnsubmit" class="btn btn-primary" onclick="submitRecords();">Update Info</button>
+                                <a href="">
+                                    <button type="reset" name="reset" id="reset" value="reset" class="btn btn-danger">Clear</button>
+                                </a>
+                                <a href="/ViewContact/{{.ID}}">
+                                    <button type="button" name="back" value="back" class="btn btn-warning"> Back</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+       </div>
+<!-- /.box-body -->
+</form>
+</section>
+</body>
+<script>
+
+jQuery(document).ready(function($) {
+
+       if ({{.Message}} != "" ) {
+      alert({{.Message}}); 
+      window.location = "/SearchContact";
+    }
+
+});
+
+function validate(evt) {
+    var input = evt.currentTarget.value;
+    var inputbox = evt.currentTarget
+    var theEvent = evt || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    var regex = /[0-9]|\./;
+    if (!regex.test(key)) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) theEvent.preventDefault();
+    }
+}
+
+function submitRecords() {
+
+
+    if($("#inputMobile").val() == "" )
+{
+   
+    alert("enter mobile");
+    $("#inputMobile").focus();
+    return false;
+}
+
+
+if($("#inputMobile").val() == "" || $("#inputMobile").val().length != 10 )
+{
+   
+    alert("enter valid mobile");
+    $("#inputMobile").focus();
+    return false;
+}
+
+
+if($("#inputName").val() == "")
+{
+   
+    alert("enter name");
+    $("#inputName").focus();
+    return false;
+}
+
+if($("#inputEmail").val() == "")
+{
+   
+    alert("enter Email");
+    $("#inputEmail").focus();
+    return false;
+}
+
+
+var filter = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+if (!filter.test($("#inputEmail").val())) 
+{
+   
+    alert("enter Valid Email");
+    $("#inputEmail").focus();
+    return false;
+}
+
+    $('body').removeClass('loaded');
+    $("#btnsubmit").prop('disabled',true);
+    $("#updateContact").submit(); 
+}
+
+</script>
+
+</html>

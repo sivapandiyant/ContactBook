@@ -1,0 +1,159 @@
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+
+        <script src="../../../static/jquery.min.js"></script>
+        <link href="../../../static/datatable.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    </head>
+    <body style="background:#F7F7F7; margin-left:20px;  margin-right:20px;">
+        <section class="content-header">
+            <h1 class="page-header">Search Contact</h1>
+            <ol class="breadcrumb ">
+                <li><a href="/Home">Home</a></li>
+                <li><a href="/SearchContact">Search</a></li>
+            </ol>
+        </section>
+        <section class="content">  
+            <form action="/SearchContact" name="SearchContact" method="post" autocomplete="off" id="SearchContact">
+
+                <h3>Search Filters</h3>
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-3 col-xs-6">
+                        <label>Contact Name</label>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-6">
+                        <div class="input-group">
+                            <input type="text" id="inputName" name="inputName" maxlength="12" value="" placeholder="Enter Name"  />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <label>Email Identity</label>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                     <div class="input-group">
+                        <input type="text" id="inputEmail" name="inputEmail" value="" maxlength="20" placeholder="Enter Email ID"   />
+                    </div>
+                </div>
+            </div><br/>
+
+            
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    <div style="float:right!important; margin-top: 2px!important;margin-bottom: 10px!important">
+                    <button type="button" onclick="submitSearch()" id="btnsubmit" class="btn btn-primary" >Search</button>
+                        <button type="reset" name="Reset" value="Clear" class="btn btn-danger"> Clear</button>
+                        <a href="/CreateContact"><button type="button" name="registerUser" value="create" class="btn btn-warning"> Create</button></a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="box box-danger hidden" id="searchTable">
+            <div class="box-header">
+                <h3 class="box-title">Results</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+            <div class="box-body table-responsive no-padding">
+                <table id="" class="table table-bordered table-striped datatables" style="width:100%;">
+                    <thead>
+                        <tr>
+                           <th></th>
+                           <th>ID</th>
+                           <th>Name</th>
+                           <th>Mobile Number</th>
+                           <th>Email ID</th>
+                           <th>Created Date</th>
+                           <th></th>
+                       </tr>
+                   </thead>
+                   <tbody></tbody> 
+               </table>
+           </div>
+       </div>
+   </section>
+</body>
+<script>    
+    jQuery(document).ready(function($) {
+
+        if( {{.Message}} == "SUCCESS"  || {{.type}} =="error")
+        { 
+            $("#searchTable").removeClass('hidden');            
+        }
+
+    });
+
+
+    function submitSearch() {
+        $('body').removeClass('loaded');
+        $("#btnsubmit").prop('disabled', true);
+        $("#SearchContact").submit();
+    }
+
+</script>
+
+
+<!-- DATA TABES SCRIPT -->
+<script type="text/javascript" src="../../../static/dataTables/jquery.dataTables.min.js"></script>
+<script src="../../../static/dataTables/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../../static/dataTables/jszip.min.js"></script>
+<script type="text/javascript" src="../../../static/dataTables/vfs_fonts.js"></script>
+<script type="text/javascript" src="../../../static/dataTables/buttons.html5.min.js"></script>
+<script type="text/javascript" src="../../../static/dataTables/buttons.print.min.js"></script>
+
+
+
+</script>
+<script>
+    $(document).ready(function(){
+        var data = {{.Contact}};
+        var table = $('.datatables').DataTable({
+    // Column definitions
+    columns : [
+    {
+        className      : 'details-control',
+        defaultContent : '',
+        data           : null,
+        orderable      : false
+    },
+    {data : 'ID'},
+    {data : 'Name'},
+    {data : 'Mobile'},
+    {data : 'Email'},
+    {data : 'CreateDate'},
+    {data : 'ID'},
+    ],
+
+    data : data,
+    "columnDefs":[
+
+    {
+        "targets": [3],
+        "data": "download_link",
+        "render": function ( data, type, full, meta ) {     
+         return '<a href="/ViewContact/'+full['ID']+'">'+data+'</a>';
+     }
+ },{
+    "targets":[1],
+    "visible":false
+},{
+    "targets": [6],
+    "data": "download_link",
+    "render": function ( data, type, full, meta ) {     
+     return '<a href="/DeleteContact/'+full['ID']+'">Delete</a>';
+ }
+}],
+dom: 'Bfrtlip',
+"iDisplayLength": 10,
+});
+
+    });
+</script>
+</html>

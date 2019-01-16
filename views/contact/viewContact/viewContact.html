@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+       <script src="../../../static/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body style="background:#F7F7F7; margin-left:20px;  margin-right:20px;">
+   
+    <section >
+        <h1 >View Contact</h1>
+        <ol class="breadcrumb ">
+            <li><a href="/Home" >Home</a></li>
+            <li><a href="/ViewContact/{{.ID}}">View Contact</a></li>
+        </ol>
+    </section>
+    <section class="content">
+        <form action="/UpdateContact/{{.ID}}" name="RegisterAgent" autocomplete="off" id="viewContact" >
+                <div class="box-body">
+                    <fieldset>
+                        <legend>
+                            <h4>General Information</h4></legend>
+                            <div class="row">
+                              
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <label>Mobile</label>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control pull-right" id="inputMobile" name="inputMobile" value="{{.Mobile}}" maxlength="50" placeholder="Mobile Number" readonly=""  />
+                            </div>
+                        </div>
+                        </div>                           
+                            
+                         </br>
+                            <div class="row">
+                               
+                                <div class="col-sm-3 col-md-3 col-xs-12">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-xs-12">
+                                    <div class="input-group ">
+                                        <input type="text" class="form-control pull-right" id="inputName" name="inputName" value={{.Name}} readonly=""maxlength="20" placeholder="Contact Name" />
+                                    </div>
+                                </div>                            
+                            </div>
+                        </br>
+                       
+            
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <label>Email Address</label>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control pull-right" id="inputEmail" name="inputEmail" value="{{.Email}}" maxlength="50" placeholder="Email Address" readonly=""  />
+                            </div>
+                        </div>
+
+                        </div>
+                        </br>
+                       
+               
+            </fieldset>
+            </div>
+
+             <div class="box box-primary pull-right">
+                <div class="box-header">
+                    <div class="row">
+                        <div class="col-lg-12 pull-right">
+                            <div style="float:right!important; margin-top: 2px!important;margin-bottom: -30px!important">
+                                <button type="button" name="addbutton" id="btnsubmit" class="btn btn-primary" onclick="submitRecords();">Update</button>
+                    
+                                <a href="/SearchContact">
+                                    <button type="button" name="back" value="back" class="btn btn-warning"> Back</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+       </div>
+<!-- /.box-body -->
+</form>
+</section>
+</body>
+<script>
+
+jQuery(document).ready(function($) {
+
+       if ({{.Message}} != "" ) {
+      alert({{.Message}}); 
+    }
+
+});
+
+function submitRecords() {
+
+
+    $('body').removeClass('loaded');
+    $("#btnsubmit").prop('disabled',true);
+    $("#viewContact").submit(); 
+}
+
+</script>
+
+</html>
